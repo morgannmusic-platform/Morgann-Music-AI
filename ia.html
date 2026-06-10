@@ -54,7 +54,7 @@
       .title { font-size: 1.1em; }
       .chat { padding: 18px 12px 150px; }
       .input-container { padding: 0 12px; }
-      .input-area { max-width: 100%; }
+      .input-area { max-width: 100%; margin: 0; }
       .bubble { max-width: 95%; }
       .convo-item { padding: 14px 40px 14px 16px; }
       #emptyState { top: 36%; }
@@ -320,8 +320,8 @@
 
   <div class="sidebar" id="sidebarMenu">
     <div class="logo">Litual AI</div>
-    <button class="new-convo" id="newConvoBtn">+ Nouveau Chat</button>
-    <button class="settings-btn" id="settingsBtn">Réglages</button>
+    <button class="new-convo" id="newConvoBtn" disabled>+ Nouveau Chat</button>
+    <button class="settings-btn" id="settingsBtn" disabled>Réglages</button>
     <div class="convos" id="convoList"></div>
   </div>
 
@@ -416,8 +416,8 @@
         <div id="modeDisplay" style="display:none; margin-right:8px;">
           <span class="mode-indicator" id="modeLabel">Apprentissage</span>
         </div>
-        <textarea id="userInput" rows="1" placeholder="Ecris ton message..."></textarea>
-        <button class="send-btn" id="sendBtn"><i class="fas fa-arrow-up"></i></button>
+        <textarea id="userInput" rows="1" placeholder="Connectez-vous pour discuter..." disabled></textarea>
+        <button class="send-btn" id="sendBtn" disabled><i class="fas fa-arrow-up"></i></button>
         <div class="input-menu" id="inputMenu">
           <button type="button" data-mode="learning">📚 Apprentissage</button>
           <button type="button" data-mode="quiz">❓ Quizz</button>
@@ -859,7 +859,18 @@ async function handleSend() {
     };
 
     onAuthStateChanged(auth, async (u) => {
-      if (!u) signInAnonymously(auth);
+      if (!u) {
+        // If not authenticated, redirect to login page
+        window.location.href = 'login.html';
+        // Disable chat elements and show a message
+        userInput.disabled = true;
+        sendBtn.disabled = true;
+        document.getElementById('newConvoBtn').disabled = true;
+        document.getElementById('settingsBtn').disabled = true;
+        chatContainer.innerHTML = `<div id="emptyState" style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                                    <p>Veuillez vous connecter pour accéder au chat.</p>
+                                  </div>`;
+      }
       else {
           await loadUserProfile(u);
           if (chatId) {
@@ -887,6 +898,12 @@ async function handleSend() {
               if (chatId === d.id) chatTitle.textContent = d.data().title || "Assistant";
             });
           });
+          // Enable chat elements if authenticated
+          userInput.disabled = false;
+          sendBtn.disabled = false;
+          document.getElementById('newConvoBtn').disabled = false;
+          document.getElementById('settingsBtn').disabled = false;
+          userInput.placeholder = "Ecris ton message...";
       }
     });
 
