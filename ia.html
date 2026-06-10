@@ -20,23 +20,47 @@
       --shadow: 0 2px 16px rgba(0,0,0,0.07);
     }
     html, body {
-      height: 100%; margin: 0; padding: 0;
+      min-height: 100%; margin: 0; padding: 0;
       font-family: 'Roboto', Arial, sans-serif;
       background: var(--bg); color: #222; overflow: hidden;
+      height: 100%;
     }
-    body { display: flex; }
+    body { display: flex; min-height: 100vh; }
     
     .sidebar {
       width: 280px; background: var(--sidebar); border-right: 1px solid var(--primary);
       display: flex; flex-direction: column; flex-shrink: 0;
+      min-height: 100vh;
     }
     /* Cacher la sidebar par défaut sur mobile, visible sur desktop */
     @media (max-width: 700px) {
+      body { flex-direction: column; }
       .sidebar { display: none; }
-      .sidebar.mobile-visible { display: flex !important; position: fixed; left: 0; top: 0; bottom: 0; height: 100vh; z-index: 100; width: 90vw; max-width: 320px; transform: translateX(0); box-shadow: 2px 0 10px rgba(0,0,0,0.07); }
+      .sidebar.mobile-visible {
+        display: flex !important;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100vh;
+        z-index: 100;
+        width: 90vw;
+        max-width: 320px;
+        transform: translateX(0);
+        box-shadow: 2px 0 10px rgba(0,0,0,0.07);
+      }
+      .main { width: 100%; }
+      .header { padding: 12px 16px; }
+      .title { font-size: 1.1em; }
+      .chat { padding: 18px 12px 150px; }
+      .input-container { padding: 0 12px; }
+      .input-area { max-width: 100%; }
+      .bubble { max-width: 95%; }
+      .convo-item { padding: 14px 40px 14px 16px; }
+      #emptyState { top: 36%; }
     }
     .logo { font-size: 1.5em; font-weight: bold; color: var(--primary); padding: 24px; text-align: center; }
-    .convos { flex: 1; overflow-y: auto; padding: 10px 0; }
+    .convos { flex: 1; min-height: 0; overflow-y: auto; padding: 10px 0; }
     
     .convo-item-wrapper { position: relative; margin-bottom: 2px; }
     .convo-item {
@@ -59,11 +83,54 @@
     .convo-actions button:hover { color: var(--primary); }
 
     .new-convo {
-      margin: 10px 24px 20px 24px; padding: 12px; border-radius: var(--radius);
+      margin: 10px 24px 10px 24px; padding: 12px; border-radius: var(--radius);
       background: var(--primary); color: #fff; border: none; font-weight: bold; cursor: pointer;
     }
+    .settings-btn {
+      margin: 0 24px 20px 24px; padding: 12px; border-radius: var(--radius);
+      background: #fff; color: var(--primary); border: 1px solid rgba(226,169,241,0.7); font-weight: bold; cursor: pointer;
+    }
+    .settings-btn:hover { background: #f8edff; }
 
-    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; height: 100vh; position: relative; }
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; z-index: 500;
+      padding: 20px;
+    }
+    .modal-backdrop.active { display: flex; }
+    .modal {
+      width: min(100%, 760px); max-height: min(100vh, 780px); overflow: hidden; border-radius: 24px; background: #fff; box-shadow: 0 24px 60px rgba(0,0,0,0.16); display: flex; flex-direction: column;
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid #ece7f5;
+    }
+    .modal-title { font-size: 1.1rem; font-weight: 700; color: #333; }
+    .modal-close { border: none; background: none; font-size: 1.5rem; color: #888; cursor: pointer; }
+    .modal-tabs { display: flex; gap: 10px; padding: 0 22px 12px; border-bottom: 1px solid #ece7f5; }
+    .modal-tab {
+      padding: 10px 16px; border-radius: 999px; border: 1px solid transparent; cursor: pointer; font-weight: 600; color: #555;
+    }
+    .modal-tab.active { background: #f9f3ff; border-color: #e2a9f1; color: var(--primary); }
+    .modal-body { overflow-y: auto; padding: 18px 22px 22px; flex: 1; }
+    .modal-section { margin-bottom: 24px; }
+    .modal-section h3 { margin: 0 0 10px; font-size: 1rem; color: #222; }
+    .modal-section p { margin: 0 0 14px; color: #555; line-height: 1.5; }
+    .modal-field {
+      width: 100%; border: 1px solid #dcd8e7; border-radius: 16px; background: #faf7ff; padding: 16px;
+    }
+    .modal-field textarea { width: 100%; border: none; outline: none; resize: vertical; min-height: 120px; background: transparent; font-size: 0.98rem; color: #222; }
+    .checkbox-list { display: grid; gap: 12px; }
+    .checkbox-item { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid #ece7f5; border-radius: 14px; padding: 12px 14px; }
+    .checkbox-item input { width: 18px; height: 18px; accent-color: var(--primary); }
+    .checkbox-item label { font-size: 0.96rem; color: #333; cursor: pointer; }
+    .modal-footer { padding: 14px 22px 22px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #ece7f5; }
+    .modal-footer button { padding: 10px 18px; border-radius: 999px; border: none; cursor: pointer; font-weight: 700; }
+    .btn-secondary { background: #f4f3ff; color: #4f3f6a; }
+    .btn-primary { background: var(--primary); color: #fff; }
+
+    .history-button { margin-top: 16px; width: 100%; padding: 12px 16px; border-radius: 16px; border: 1px solid #f1d9ff; background: #fff0fc; color: #7a2a7b; cursor: pointer; font-weight: 700; }
+    .history-button:hover { background: #fde4ff; }
+
+    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 100vh; position: relative; }
     .header {
       display: flex; align-items: center; gap: 12px;
       padding: 15px 24px; border-bottom: 1px solid var(--primary); background: var(--sidebar);
@@ -84,10 +151,19 @@
     }
     .header .title { font-size: 1.2em; font-weight: bold; color: var(--primary); flex: 1; display: flex; align-items: center; gap: 10px; }
     
-    .chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 110px; }
+    .chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 160px; }
     
-    table { border-collapse: collapse; width: 100%; margin: 10px 0; background: #fff; border-radius: 8px; overflow: hidden; }
-    th, td { border: 1px solid #e2a9f1; padding: 10px; text-align: left; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 10px 0;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      display: block;
+      overflow-x: auto;
+    }
+    th, td { border: 1px solid #e2a9f1; padding: 10px; text-align: left; white-space: nowrap; }
     th { background: #fcf0ff; color: var(--primary); }
 
     .bubble {
@@ -98,14 +174,75 @@
     .bubble.user { align-self: flex-end; background: var(--bubble-user); border-bottom-right-radius: 4px; }
     .bubble.ai { align-self: flex-start; background: var(--bubble-ai); border-bottom-left-radius: 4px; border: 1px solid #e0e7ef; }
 
-    .input-container { position: absolute; bottom: 20px; left: 0; right: 0; display: flex; justify-content: center; padding: 0 20px; pointer-events: none; }
+    .input-container { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: center; padding: 12px 20px 20px; pointer-events: none; z-index: 20; }
     .input-area {
       width: 100%; max-width: 800px; background: #fff; border: 1px solid #cfe7ff;
-      border-radius: 30px; padding: 8px 15px; display: flex; align-items: center; gap: 10px;
+      border-radius: 30px; padding: 8px 15px; margin: 0 0 0 280px; display: flex; align-items: center; gap: 10px;
       box-shadow: var(--shadow); pointer-events: auto;
     }
+    .toolbar-btn {
+      width: 40px; height: 40px; border-radius: 50%; border: none; background: #f7efff; color: var(--primary); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 1.15rem; pointer-events: auto;
+    }
+    .input-menu {
+      position: absolute; bottom: calc(100% + 8px); left: 8px; width: 220px; background: #fff; border: 1px solid #e7d9f9;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.12); border-radius: 18px; display: none; flex-direction: column; overflow: hidden; z-index: 30;
+      pointer-events: auto;
+    }
+    .input-menu.active { display: flex; }
+    .input-menu button {
+      border: none; background: none; padding: 14px 16px; text-align: left; width: 100%; cursor: pointer; color: #333; transition: all 0.2s;
+    }
+    .input-menu button:hover { background: #f5ecff; }
+    .input-menu button.active-mode { background: #e2a9f1; color: #fff; font-weight: 600; }
+    
+    .input-menu label {
+      pointer-events: auto;
+    }
+    
+    .mode-indicator {
+      display: inline-block; padding: 4px 10px; background: #e2a9f1; color: #fff; border-radius: 16px; font-size: 0.75rem; font-weight: 600; margin-right: 8px;
+    }
     .input-area textarea { flex: 1; border: none; outline: none; padding: 10px; font-size: 1em; resize: none; background: transparent; max-height: 150px; }
-    .input-area button { background: var(--primary); color: #fff; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; transition: 0.1s; }
+    .input-area button.send-btn { background: var(--primary); color: #fff; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; transition: 0.1s; }
+
+    .typing-bubble {
+      line-height: 1.4;
+      opacity: 0.98;
+    }
+    .typing-bubble .typing-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .typing-logo {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      animation: spin 1.2s linear infinite;
+    }
+    .typing-dots {
+      display: inline-flex;
+      gap: 3px;
+      margin-left: 3px;
+    }
+    .typing-dots span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #7a2a7b;
+      opacity: 0.25;
+      animation: blink 1s infinite ease-in-out;
+    }
+    .typing-dots span:nth-child(1) { animation-delay: 0s; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes blink {
+      0%, 20%, 100% { opacity: 0.25; }
+      50% { opacity: 1; }
+    }
 
     #emptyState { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
     .slow-spin { height: 200px; animation: spin 10s linear infinite; }
@@ -142,6 +279,41 @@
   align-self: flex-start;
   max-width: 85%;
 }
+
+/* Styles pour les boutons de quizz */
+.quiz-question {
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quiz-btn {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid #e2a9f1;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.quiz-btn:hover {
+  background: #f9f3ff;
+  border-color: #d084e5;
+}
+
+.quiz-btn.selected {
+  background: #e2a9f1;
+  color: #fff;
+  border-color: #d084e5;
+}
   </style>
 </head>
 <body>
@@ -149,28 +321,107 @@
   <div class="sidebar" id="sidebarMenu">
     <div class="logo">Litual AI</div>
     <button class="new-convo" id="newConvoBtn">+ Nouveau Chat</button>
+    <button class="settings-btn" id="settingsBtn">Réglages</button>
     <div class="convos" id="convoList"></div>
+  </div>
+
+  <div class="modal-backdrop" id="settingsModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="settingsTitle">Réglages de l’IA</div>
+          <div style="color:#666; font-size:0.92rem; margin-top:4px;">Personnalise le comportement de Litual.</div>
+        </div>
+        <button class="modal-close" id="closeSettingsBtn" aria-label="Fermer">×</button>
+      </div>
+      <div class="modal-tabs">
+        <button class="modal-tab active" data-tab="instructions">Instruction personnalisée</button>
+        <button class="modal-tab" data-tab="history">Historique</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-panel" data-panel="instructions">
+          <div class="modal-section">
+            <h3>Instruction personnalisée</h3>
+            <p>Ajoute des informations que l’IA doit connaître sur toi ou ton contexte.</p>
+            <div class="modal-field">
+              <textarea id="customInstructionInput" placeholder="Par exemple : Je suis musicien, j'aime les réponses claires et créatives..."></textarea>
+            </div>
+          </div>
+          <div class="modal-section">
+            <h3>Votre identité</h3>
+            <p>Indique ton nom et prénom pour que Litual puisse te nommer correctement.</p>
+            <div class="modal-field" style="display:grid; gap:10px;">
+              <input type="text" id="userFirstName" placeholder="Prénom" style="width:100%; padding:12px; border:none; border-radius:14px; background:#faf7ff;"> 
+              <input type="text" id="userLastName" placeholder="Nom" style="width:100%; padding:12px; border:none; border-radius:14px; background:#faf7ff;">
+            </div>
+          </div>
+          <div class="modal-section">
+            <h3>Options d’écriture</h3>
+            <div class="checkbox-list">
+              <label class="checkbox-item"><input type="checkbox" id="optionEmoji"> <span>Utiliser des émojis dans les réponses</span></label>
+              <label class="checkbox-item"><input type="checkbox" id="optionCreative"> <span>Donner des idées créatives et des exemples</span></label>
+              <label class="checkbox-item"><input type="checkbox" id="optionConcise"> <span>Répondre de manière concise</span></label>
+              <label class="checkbox-item"><input type="checkbox" id="optionFriendly"> <span>Adopter un ton chaleureux et accueillant</span></label>
+              <label class="checkbox-item"><input type="checkbox" id="optionExpert"> <span>Être expert en ...</span></label>
+            </div>
+            <div class="modal-section" style="margin-top:12px;">
+              <div class="modal-field">
+                <textarea id="expertSubjectInput" placeholder="Si sélectionné, précise le domaine d'expertise..." disabled></textarea>
+              </div>
+              <p style="margin-top:10px; font-size:0.95rem; color:#555;">Avec cette option Litual se concentrera pour vous donner un maximum d'information sur le sujet.</p>
+            </div>
+          </div>
+          <div class="modal-section">
+            <h3>Ton de Litual</h3>
+            <div class="checkbox-list">
+              <label class="checkbox-item"><input type="radio" name="toneOption" id="toneProfessional" value="Professionnel"> <span>Professionnel</span></label>
+              <label class="checkbox-item"><input type="radio" name="toneOption" id="tonePlayful" value="Joueur"> <span>Joueur</span></label>
+              <label class="checkbox-item"><input type="radio" name="toneOption" id="tonePersonal" value="Personnel"> <span>Personnel</span></label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-panel" data-panel="history" style="display:none;">
+          <div class="modal-section">
+            <h3>Historique</h3>
+            <p>Supprime toutes les conversations de ton compte. Attention : cette action est irréversible.</p>
+            <button class="history-button" id="clearHistoryBtn">Supprimer toutes les conversations</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="resetSettingsBtn">Réinitialiser</button>
+        <button class="btn-primary" id="saveSettingsBtn">Sauvegarder</button>
+      </div>
+    </div>
   </div>
 
   <div class="main">
     <div class="header">
       <button class="menu-toggle" id="menuToggleBtn"><i class="fas fa-bars"></i></button>
       <span class="title">
-        <a href="/index.html"><img src="o!§ititititt.png" alt="logo" style="height:35px;"></a> 
+        <a href="/index.html"><img src="/assets/img/o!§ititititt.png" alt="logo" style="height:35px;"></a> 
         <span id="chatTitle">Assistant</span>
       </span>
     </div>
 
     <div class="chat" id="chat">
         <div id="emptyState">
-            <img src="o!§ititititt.png" class="slow-spin">
+            <img src="/assets/img/o!§ititititt.png" class="slow-spin">
         </div>
     </div>
 
     <div class="input-container">
-      <div class="input-area">
+      <div class="input-area" style="position: relative;">
+        <button class="toolbar-btn" id="toolbarBtn">+</button>
+        <div id="modeDisplay" style="display:none; margin-right:8px;">
+          <span class="mode-indicator" id="modeLabel">Apprentissage</span>
+        </div>
         <textarea id="userInput" rows="1" placeholder="Ecris ton message..."></textarea>
-        <button id="sendBtn"><i class="fas fa-arrow-up"></i></button>
+        <button class="send-btn" id="sendBtn"><i class="fas fa-arrow-up"></i></button>
+        <div class="input-menu" id="inputMenu">
+          <button type="button" data-mode="learning">📚 Apprentissage</button>
+          <button type="button" data-mode="quiz">❓ Quizz</button>
+        </div>
       </div>
     </div>
   </div>
@@ -178,7 +429,7 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script type="module">
     import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, limit, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, getDoc, limit, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -200,8 +451,254 @@
     const sendBtn = document.getElementById('sendBtn');
     const chatTitle = document.getElementById('chatTitle');
 
+    const settingsKey = 'litual_ai_settings';
+    const defaultSettings = {
+      customInstruction: '',
+      useEmoji: false,
+      creative: true,
+      concise: false,
+      friendly: true,
+      expertEnabled: false,
+      expertSubject: '',
+      tone: 'Professionnel',
+      chatMode: 'normal',
+    };
+    let currentSettings = { ...defaultSettings };
+    let firebaseProfile = { firstName: '', lastName: '' };
     marked.setOptions({ breaks: true, gfm: true });
+    loadSettings();
+    applySettingsToForm();
 
+    let loadedSystemInstruction = null;
+    const defaultSystemInstruction = '';
+
+    function loadSettings() {
+      try {
+        const stored = localStorage.getItem(settingsKey);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          currentSettings = { ...defaultSettings, ...parsed };
+        }
+      } catch (e) {
+        currentSettings = { ...defaultSettings };
+      }
+    }
+
+    function saveSettings() {
+      localStorage.setItem(settingsKey, JSON.stringify(currentSettings));
+    }
+
+    function applySettingsToForm() {
+      const firstNameInput = document.getElementById('userFirstName');
+      const lastNameInput = document.getElementById('userLastName');
+      document.getElementById('customInstructionInput').value = currentSettings.customInstruction || '';
+      firstNameInput.value = currentSettings.firstName || '';
+      lastNameInput.value = currentSettings.lastName || '';
+      if (firebaseProfile.firstName || firebaseProfile.lastName) {
+        firstNameInput.readOnly = true;
+        lastNameInput.readOnly = true;
+        firstNameInput.title = 'Nom/prénom récupérés depuis le profil Firebase';
+        lastNameInput.title = 'Nom/prénom récupérés depuis le profil Firebase';
+      } else {
+        firstNameInput.readOnly = false;
+        lastNameInput.readOnly = false;
+        firstNameInput.title = '';
+        lastNameInput.title = '';
+      }
+      document.getElementById('optionEmoji').checked = currentSettings.useEmoji;
+      document.getElementById('optionCreative').checked = currentSettings.creative;
+      document.getElementById('optionConcise').checked = currentSettings.concise;
+      document.getElementById('optionFriendly').checked = currentSettings.friendly;
+      document.getElementById('optionExpert').checked = currentSettings.expertEnabled;
+      const expertInput = document.getElementById('expertSubjectInput');
+      expertInput.value = currentSettings.expertSubject || '';
+      expertInput.disabled = !currentSettings.expertEnabled;
+      document.getElementById('toneProfessional').checked = currentSettings.tone === 'Professionnel';
+      document.getElementById('tonePlayful').checked = currentSettings.tone === 'Joueur';
+      document.getElementById('tonePersonal').checked = currentSettings.tone === 'Personnel';
+      const toolbarBtn = document.getElementById('toolbarBtn');
+      if (toolbarBtn) {
+        toolbarBtn.title = currentSettings.chatMode === 'learning' ? 'Mode apprentissage activé' : currentSettings.chatMode === 'quiz' ? 'Mode quizz activé' : 'Ouvrir les options du chat';
+      }
+    }
+
+    function resetSettings() {
+      currentSettings = { ...defaultSettings };
+      applySettingsToForm();
+      saveSettings();
+    }
+
+    function updateExpertField() {
+      const enabled = document.getElementById('optionExpert').checked;
+      const expertInput = document.getElementById('expertSubjectInput');
+      expertInput.disabled = !enabled;
+      if (!enabled) {
+        expertInput.value = '';
+      }
+    }
+
+    function getInstructionModifiers() {
+      const modifiers = [];
+      if (currentSettings.customInstruction?.trim()) {
+        modifiers.push(`Information utilisateur : ${currentSettings.customInstruction.trim()}`);
+      }
+      if (currentSettings.expertEnabled && currentSettings.expertSubject?.trim()) {
+        modifiers.push(`Sois expert en ${currentSettings.expertSubject.trim()} et fournis un maximum d'informations sur ce sujet.`);
+      }
+      if (currentSettings.useEmoji) {
+        modifiers.push(`Utilise des émojis dans les réponses pour rendre le ton plus expressif et convivial.`);
+      }
+      if (currentSettings.creative) {
+        modifiers.push(`Propose des idées créatives, des pistes originales et des exemples concrets lorsque c'est pertinent.`);
+      }
+      if (currentSettings.concise) {
+        modifiers.push(`Reste concis et va à l'essentiel dans tes réponses.`);
+      }
+      if (currentSettings.friendly) {
+        modifiers.push(`Adopte un ton chaleureux, bienveillant et facile à lire.`);
+      }
+      if (currentSettings.tone) {
+        modifiers.push(`Utilise un ton ${currentSettings.tone.toLowerCase()} dans le texte.`);
+      }
+      modifiers.push(`Ne pas utiliser d'abréviations. Parler de manière complète, polie et formelle, sans ton amical ni familier.`);
+      const fullName = firebaseProfile.firstName || firebaseProfile.lastName
+        ? `${firebaseProfile.firstName || ''} ${firebaseProfile.lastName || ''}`.trim()
+        : `${currentSettings.firstName || ''} ${currentSettings.lastName || ''}`.trim();
+      if (fullName) {
+        modifiers.push(`Adresse-toi à l'utilisateur en utilisant son nom : ${fullName}.`);
+      }
+      if (currentSettings.chatMode === 'learning') {
+        modifiers.push(`Mode apprentissage : aide l'utilisateur à comprendre un sujet de manière progressive et pédagogique.`);
+      }
+      if (currentSettings.chatMode === 'quiz') {
+        modifiers.push(`Mode quizz : propose une question et plusieurs choix de réponse interactifs, et attends que l'utilisateur choisisse.`);
+      }
+      return modifiers.join('\n');
+    }
+
+    async function buildFinalInstruction(baseInstruction) {
+      const modifierText = getInstructionModifiers();
+      return modifierText ? `${baseInstruction}\n\n${modifierText}` : baseInstruction;
+    }
+
+    function openSettings() {
+      document.getElementById('settingsModal').classList.add('active');
+    }
+    function closeSettings() {
+      document.getElementById('settingsModal').classList.remove('active');
+    }
+    function switchTab(tabName) {
+      document.querySelectorAll('.modal-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.tab === tabName);
+      });
+      document.querySelectorAll('.modal-panel').forEach((panel) => {
+        panel.style.display = panel.dataset.panel === tabName ? 'block' : 'none';
+      });
+    }
+
+    async function deleteAllConversations() {
+      if (!confirm('Supprimer toutes les conversations ? Cette action est irréversible.')) return;
+      const snap = await getDocs(query(collection(db, 'conversations'), orderBy('lastUpdate', 'desc')));
+      const deletes = snap.docs.map(async (docItem) => deleteDoc(doc(db, 'conversations', docItem.id)));
+      await Promise.all(deletes);
+      alert('Toutes les conversations ont été supprimées.');
+      if (chatId) window.location.href = window.location.pathname;
+    }
+
+    async function loadInstructionFiles() {
+      try {
+        const manifestRes = await fetch('./instruction/index.json');
+        if (!manifestRes.ok) throw new Error('Impossible de charger instruction/index.json');
+        const manifest = await manifestRes.json();
+        if (!manifest.files || !Array.isArray(manifest.files)) throw new Error('Manifest invalide');
+
+        const contents = await Promise.all(manifest.files.map(async (filename) => {
+          const res = await fetch(`./instruction/${encodeURIComponent(filename)}`);
+          return res.ok ? await res.text() : '';
+        }));
+
+        const content = contents.filter(Boolean).join('\n\n').trim();
+        return content || defaultSystemInstruction;
+      } catch (err) {
+        console.warn('Erreur lors du chargement des instructions:', err);
+        return defaultSystemInstruction;
+      }
+    }
+
+    async function getSystemInstruction() {
+      if (loadedSystemInstruction !== null) return loadedSystemInstruction;
+      loadedSystemInstruction = await loadInstructionFiles();
+      return loadedSystemInstruction;
+    }
+
+    function updateAIBubble(bubble, text) {
+      // Détecter si c'est un quiz
+      if (currentSettings.chatMode === 'quiz') {
+        // Pattern plus flexible : cherche les marqueurs d'options (A), 1), -, •, etc.)
+        const optionPattern = /^\s*([A-Z]\)|[a-z]\)|[0-9]+\.|-|•|\*)\s+(.+?)$/gm;
+        let match;
+        const options = [];
+        let lastOptionIndex = 0;
+        
+        while ((match = optionPattern.exec(text)) !== null) {
+          options.push({
+            marker: match[1],
+            text: match[2].trim(),
+            startIndex: match.index
+          });
+          lastOptionIndex = match.index;
+        }
+        
+        // Si on a au moins 2 options, c'est probablement un quiz
+        if (options.length >= 2) {
+          // La question est tout ce qui precede la premiere option
+          let question = text.substring(0, options[0].startIndex).trim();
+          
+          // Enlever les phrases génériques de fin comme "quel est votre choix", "choisissez", etc.
+          question = question
+            .replace(/quel\s+(?:est\s+)?(?:votre\s+)?choix\s*[?:]*$/im, '')
+            .replace(/choisissez\s+(?:la|une)?\s*(?:bonne\s+)?réponse\s*[?:]*$/im, '')
+            .replace(/sélectionnez\s+(?:la|une)?\s+réponse\s*[?:]*$/im, '')
+            .replace(/parmi\s+ces\s+options\s*[?:]*$/im, '')
+            .replace(/\n+\s*$/gm, '')
+            .trim();
+          
+          bubble.innerHTML = '';
+          const questionDiv = document.createElement("div");
+          questionDiv.className = "quiz-question";
+          questionDiv.innerHTML = marked.parse(question);
+          bubble.appendChild(questionDiv);
+          
+          const optionsDiv = document.createElement("div");
+          optionsDiv.className = "quiz-options";
+          
+          options.forEach((option) => {
+            const btn = document.createElement("button");
+            btn.className = "quiz-btn";
+            btn.innerHTML = marked.parse(option.text);
+            btn.addEventListener('click', function() {
+              btn.classList.add('selected');
+              document.querySelectorAll('.quiz-btn').forEach(b => {
+                if (b !== btn) b.disabled = true;
+              });
+              setTimeout(() => {
+                const response = `Je choisis : ${option.text}`;
+                userInput.value = response;
+                handleSend();
+              }, 500);
+            });
+            optionsDiv.appendChild(btn);
+          });
+          
+          bubble.appendChild(optionsDiv);
+          return;
+        }
+      }
+      
+      // Mode normal : afficher le texte tel quel
+      bubble.innerHTML = marked.parse(text);
+    }
+    
     function renderMessage(role, text) {
       if (document.getElementById("emptyState")) document.getElementById("emptyState").style.display = "none";
       const div = document.createElement("div");
@@ -216,8 +713,19 @@ async function handleSend() {
   const text = userInput.value.trim();
   if (!text) return;
 
+  // --- DÉTECTION AUTOMATIQUE DU MODE QUIZZ ---
+  const quizKeywords = ["quizz", "quiz", "teste-moi", "teste moi", "test moi", "teste moi", "évalue-moi", "évalue moi", "quizzer"];
+  const isQuizRequest = quizKeywords.some(keyword => text.toLowerCase().includes(keyword));
+  
+  if (isQuizRequest && currentSettings.chatMode !== 'quiz') {
+    currentSettings.chatMode = 'quiz';
+    saveSettings();
+    applySettingsToForm();
+    updateModeDisplay();
+  }
+
   // --- LOGIQUE DE FILTRE SENSIBLE ---
-  const sensitiveWords = ["porno", "sexe", "xxx", "nude", "drogue", "morphine", "codéine", "fentanyl", "tramadol", "xanax", "valium", "antidépresseur", "anabolisant", "stéroïde", "viagra", "subutex", "méthadone", "psychotrope", "somnifère", "overdose", "seringue", "aiguille", "stupéfiant", "addiction", "dépendance", "overdose", "hallucinogène", "extasy", "héroïne", "cocaïne", "cannabis", "cadavre", "suicide", "meurtre", "sanglant", "mutilation", "décapitation", "assassinat", "viol", "agression", "pédophilie", "hentai", "escort", "prostitution", "orgie", "striptease", "érotique", "inceste", "fétichisme", "sadisme", "masochisme", "exhibitionsme", "voyeurisme", "bite", ]; // Rajoute tes mots ici
+  const sensitiveWords = ["porno", "sexe", "xxx", "nude", "drogue", "morphine", "codéine", "fentanyl", "tramadol", "xanax", "valium", "antidépresseur", "anabolisant", "stéroïde", "viagra", "subutex", "méthadone", "psychotrope", "somnifère", "overdose", "seringue", "aiguille", "stupéfiant", "addiction", "dépendance", "hallucinogène", "extasy", "héroïne", "cocaïne", "cannabis", "cadavre", "suicide", "meurtre", "sanglant", "mutilation", "décapitation", "assassinat", "viol", "agression", "pédophilie", "hentai", "escort", "prostitution", "orgie", "striptease", "érotique", "inceste", "fétichisme", "sadisme", "masochisme", "exhibitionsme", "voyeurisme"];
   const isSensitive = sensitiveWords.some(word => text.toLowerCase().includes(word));
 
   if (isSensitive) {
@@ -230,11 +738,11 @@ async function handleSend() {
     chatContainer.appendChild(container);
     userInput.value = '';
     chatContainer.scrollTop = chatContainer.scrollHeight;
-    return; // On arrête tout, on n'envoie rien à l'IA
+    return;
   }
 
   // --- LOGIQUE MÉDICALE ---
-  const medicalWords = ["mal", "douleur", "maladie", "médicament", "soigner", "docteur", "santé", "symptôme", "diagnostic", "hôpital", "clinique", "seringue", "stéthoscope", "bloc", "brancard", "scanner", "IRM", "pansement", "compresse", "scalpel", "tensiomètre", "thermomètre", "soins", "urgence", "paracétamol", "antibio", "sirop", "gélule", "comprimé", "pommade", "vaccin", "aspirine", "insuline", "vitamine", "collyre", "antidouleur", "ordonnance", "posologie", "générique", "chirurgien", "infirmier", "doc", "interne", "pharmacien", "dentiste", "kiné", "anesthésiste", "sage-femme", "spécialiste", "généraliste", "aide-soignant", "fièvre", "inflammation", "tension", "pouls", "diagnostic", "analyse", "pathologie", "symptôme", "fracture", "entorse", "ordonnance", "traitement", "convalescence"]; // Rajoute tes mots ici
+  const medicalWords = ["mal", "douleur", "maladie", "médicament", "soigner", "docteur", "santé", "symptôme", "diagnostic", "hôpital", "clinique", "seringue", "stéthoscope", "bloc", "brancard", "scanner", "IRM", "pansement", "compresse", "scalpel", "tensiomètre", "thermomètre", "soins", "urgence", "paracétamol", "antibio", "sirop", "gélule", "comprimé", "pommade", "vaccin", "aspirine", "insuline", "vitamine", "collyre", "antidouleur", "ordonnance", "posologie", "générique", "chirurgien", "infirmier", "doc", "interne", "pharmacien", "dentiste", "kiné", "anesthésiste", "sage-femme", "spécialiste", "généraliste", "aide-soignant", "fièvre", "inflammation", "tension", "pouls", "analyse", "pathologie", "fracture", "entorse", "traitement", "convalescence"];
   const isMedical = medicalWords.some(word => text.toLowerCase().includes(word));
 
   if (!chatId) {
@@ -247,25 +755,33 @@ async function handleSend() {
   userInput.value = '';
   userInput.style.height = 'auto';
 
-  await addDoc(collection(db, "conversations", chatId, "messages"), { role: "user", text: text, createdAt: serverTimestamp() });
-
   const historySnap = await getDocs(query(collection(db, "conversations", chatId, "messages"), orderBy("createdAt", "asc")));
   const messagesForAI = [];
   historySnap.forEach(doc => {
-      messagesForAI.push({ role: doc.data().role === "assistant" ? "assistant" : "user", content: doc.data().text });
+      messagesForAI.push({
+        role: doc.data().role === "assistant" ? "assistant" : "user",
+        content: doc.data().text
+      });
   });
 
+  messagesForAI.push({
+    role: "user",
+    content: text
+  });
+
+  await addDoc(collection(db, "conversations", chatId, "messages"), { role: "user", text: text, createdAt: serverTimestamp() });
   try {
+    const baseInstruction = await getSystemInstruction();
+    const systemInstruction = await buildFinalInstruction(baseInstruction);
     const response = await fetch("https://litual.ai.morgannmusic.uk", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        instruction: "Tu es Litual. Tu dois être une IA amicale et simple. Utilise le Markdown au plus que tu peux (gras, tableaux, listes, titres). Tu as accès à l'historique de la conversation pour rester cohérent. Ne réponds jamais que par du texte formaté en Markdown, même pour les tableaux ou les listes. Ne réponds jamais par du texte brut sans formatage. Ne réponds jamais par du HTML. Si tu ne connais pas la réponse, excuse toi et dis que tu ne sais pas, n'invente pas de réponse. Reste simple et clair. Tu as été créé par Morgann Rachedi un jeune compositeur/developpeur/entrepreneur de 13 ans. Ton nom est Litual. De la sous-entreprise Litual AI de l'entreprise Morgann AI CP une branche des entreprises de Morgann Rachedi.", // Garde ton instruction actuelle
+        instruction: systemInstruction,
         messages: messagesForAI
       })
     });
 
-    // Création du container pour pouvoir mettre le badge AU-DESSUS de la bulle
     const container = document.createElement("div");
     container.className = "ai-container";
     
@@ -274,10 +790,16 @@ async function handleSend() {
     }
     
     const aiBubble = document.createElement("div");
-    aiBubble.className = "bubble ai";
-    aiBubble.innerHTML = "...";
+    aiBubble.className = "bubble ai typing-bubble";
+    aiBubble.innerHTML = `
+      <div class="typing-bar">
+        <img src="/assets/img/o!§ititititt.png" class="typing-logo" alt="Litual en réflexion" />
+        <span>Litual réfléchit<span class="typing-dots"><span></span><span></span><span></span></span></span>
+      </div>
+    `;
     container.appendChild(aiBubble);
     chatContainer.appendChild(container);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
 
     let fullAiText = "";
     const reader = response.body.getReader();
@@ -294,7 +816,7 @@ async function handleSend() {
             const json = JSON.parse(line.trim().slice(6));
             if (json.response) {
               fullAiText += json.response;
-              aiBubble.innerHTML = marked.parse(fullAiText);
+              updateAIBubble(aiBubble, fullAiText);
               chatContainer.scrollTop = chatContainer.scrollHeight;
             }
           } catch (e) {}
@@ -308,6 +830,22 @@ async function handleSend() {
   }
 }
 
+    async function loadUserProfile(user) {
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          firebaseProfile.firstName = data.firstName || '';
+          firebaseProfile.lastName = data.lastName || '';
+          currentSettings.firstName = firebaseProfile.firstName;
+          currentSettings.lastName = firebaseProfile.lastName;
+          applySettingsToForm();
+        }
+      } catch (err) {
+        console.warn('Impossible de charger le profil utilisateur Firebase', err);
+      }
+    }
+
     window.deleteConvo = async (id) => {
         if(confirm("Supprimer ?")) {
             await deleteDoc(doc(db, "conversations", id));
@@ -320,9 +858,10 @@ async function handleSend() {
         if(t) await updateDoc(doc(db, "conversations", id), { title: t });
     };
 
-    onAuthStateChanged(auth, (u) => {
+    onAuthStateChanged(auth, async (u) => {
       if (!u) signInAnonymously(auth);
       else {
+          await loadUserProfile(u);
           if (chatId) {
             getDocs(query(collection(db, "conversations", chatId, "messages"), orderBy("createdAt", "asc"))).then(snap => {
               chatContainer.innerHTML = "";
@@ -355,6 +894,33 @@ async function handleSend() {
     userInput.onkeydown = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } };
     userInput.oninput = () => { userInput.style.height = 'auto'; userInput.style.height = userInput.scrollHeight + 'px'; };
     document.getElementById('newConvoBtn').onclick = () => window.location.href = window.location.pathname;
+    document.getElementById('settingsBtn').onclick = openSettings;
+    document.getElementById('closeSettingsBtn').onclick = closeSettings;
+    document.getElementById('saveSettingsBtn').onclick = () => {
+      currentSettings.customInstruction = document.getElementById('customInstructionInput').value;
+      currentSettings.firstName = document.getElementById('userFirstName').value.trim();
+      currentSettings.lastName = document.getElementById('userLastName').value.trim();
+      currentSettings.useEmoji = document.getElementById('optionEmoji').checked;
+      currentSettings.creative = document.getElementById('optionCreative').checked;
+      currentSettings.concise = document.getElementById('optionConcise').checked;
+      currentSettings.friendly = document.getElementById('optionFriendly').checked;
+      currentSettings.expertEnabled = document.getElementById('optionExpert').checked;
+      currentSettings.expertSubject = document.getElementById('expertSubjectInput').value;
+      const toneRadio = document.querySelector('input[name="toneOption"]:checked');
+      if (toneRadio) currentSettings.tone = toneRadio.value;
+      saveSettings();
+      closeSettings();
+    };
+    document.getElementById('resetSettingsBtn').onclick = resetSettings;
+    document.getElementById('clearHistoryBtn').onclick = deleteAllConversations;
+    
+    // Event listener pour le checkbox Expert
+    document.getElementById('optionExpert').addEventListener('change', updateExpertField);
+    
+    document.querySelectorAll('.modal-tab').forEach((tab) => tab.addEventListener('click', () => switchTab(tab.dataset.tab)));
+    document.getElementById('settingsModal').addEventListener('click', (event) => {
+      if (event.target === event.currentTarget) closeSettings();
+    });
 
     // Menu toggle uniquement sur mobile
     const sidebarMenu = document.getElementById('sidebarMenu');
@@ -380,6 +946,59 @@ async function handleSend() {
         }
       }
     });
+
+    // Toolbar menu pour chat modes
+    const toolbarBtn = document.getElementById('toolbarBtn');
+    const inputMenu = document.getElementById('inputMenu');
+    const modeDisplay = document.getElementById('modeDisplay');
+    const modeLabel = document.getElementById('modeLabel');
+    
+    function updateModeDisplay() {
+      if (currentSettings.chatMode && currentSettings.chatMode !== 'normal') {
+        modeDisplay.style.display = 'block';
+        const modeNames = { learning: '📚 Apprentissage', quiz: '❓ Quizz' };
+        modeLabel.textContent = modeNames[currentSettings.chatMode] || currentSettings.chatMode;
+      } else {
+        modeDisplay.style.display = 'none';
+      }
+      
+      // Marquer le bouton actif
+      inputMenu.querySelectorAll('button[data-mode]').forEach(btn => {
+        btn.classList.toggle('active-mode', btn.dataset.mode === currentSettings.chatMode);
+      });
+    }
+    
+    toolbarBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      inputMenu.classList.toggle('active');
+    });
+
+    // Gérer les clics sur les boutons du menu
+    inputMenu.querySelectorAll('button[data-mode]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const mode = this.dataset.mode;
+        // Toggle: si on clique sur le même mode, le désactiver
+        if (currentSettings.chatMode === mode) {
+          currentSettings.chatMode = 'normal';
+        } else {
+          currentSettings.chatMode = mode;
+        }
+        saveSettings();
+        applySettingsToForm();
+        updateModeDisplay();
+        inputMenu.classList.remove('active');
+      });
+    });
+
+    // Fermer le menu si on clique en dehors
+    document.addEventListener('click', function(e) {
+      if (!toolbarBtn.contains(e.target) && !inputMenu.contains(e.target)) {
+        inputMenu.classList.remove('active');
+      }
+    });
+    
+    // Initialiser l'affichage du mode
+    updateModeDisplay();
   </script>
 </body>
 </html>
