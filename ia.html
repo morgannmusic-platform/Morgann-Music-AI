@@ -23,7 +23,7 @@
       min-height: 100%; margin: 0; padding: 0;
       font-family: 'Roboto', Arial, sans-serif;
       background: var(--bg); color: #222; overflow: hidden;
-      height: 100%;
+      height: 100%; /* Conserver height: 100% pour le bon fonctionnement de flexbox */
     }
     body { display: flex; min-height: 100vh; }
     
@@ -52,7 +52,7 @@
       .main { width: 100%; }
       .header { padding: 12px 16px; }
       .title { font-size: 1.1em; }
-      .chat { padding: 18px 12px 150px; }
+      .chat { padding: 18px 12px 200px; } /* Augmentation du padding-bottom pour mobile */
       .input-container { padding: 0 12px; }
       .input-area { max-width: 100%; margin: 0; }
       .bubble { max-width: 95%; }
@@ -152,7 +152,7 @@
     .header .title { font-size: 1.2em; font-weight: bold; color: var(--primary); flex: 1; display: flex; align-items: center; gap: 10px; }
     
     .chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 160px; }
-    
+    .chat { padding-bottom: 200px; } /* Augmentation du padding-bottom pour desktop */
     table {
       border-collapse: collapse;
       width: 100%;
@@ -730,7 +730,7 @@ async function handleSend() {
 
   // --- LOGIQUE DE FILTRE SENSIBLE ---
   const sensitiveWords = ["porno", "sexe", "xxx", "nude", "drogue", "morphine", "codéine", "fentanyl", "tramadol", "xanax", "valium", "antidépresseur", "anabolisant", "stéroïde", "viagra", "subutex", "méthadone", "psychotrope", "somnifère", "overdose", "seringue", "aiguille", "stupéfiant", "addiction", "dépendance", "hallucinogène", "extasy", "héroïne", "cocaïne", "cannabis", "cadavre", "suicide", "meurtre", "sanglant", "mutilation", "décapitation", "assassinat", "viol", "agression", "pédophilie", "hentai", "escort", "prostitution", "orgie", "striptease", "érotique", "inceste", "fétichisme", "sadisme", "masochisme", "exhibitionsme", "voyeurisme"];
-  const isSensitive = sensitiveWords.some(word => text.toLowerCase().includes(word));
+  const isSensitive = sensitiveWords.some(word => new RegExp(`\\b${word}\\b`).test(text.toLowerCase()));
 
   if (isSensitive) {
     const container = document.createElement("div");
