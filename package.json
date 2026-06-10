@@ -1,0 +1,8 @@
+{
+  "name": "litual-ai",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build-instruction-index": "node instruction/build-index.js"
+  }
+}
